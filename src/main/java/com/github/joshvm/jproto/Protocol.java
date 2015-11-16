@@ -56,6 +56,10 @@ public class Protocol implements ProtocolConstants{
         return PacketBuffer.buffer(opcodeType, opcode, length);
     }
 
+    public PacketBuffer newPacketBuffer(final Number opcode){
+        return newPacketBuffer(opcode, get(opcode.intValue()).length());
+    }
+
     public PacketBuffer newVarBytePacketBuffer(final Number opcode){
         return newPacketBuffer(opcode, VARIABLE_BYTE);
     }

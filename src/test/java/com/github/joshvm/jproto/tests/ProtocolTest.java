@@ -53,19 +53,19 @@ public class ProtocolTest {
     }
 
     public static byte[] addPerson(final int id){
-        return protocol.newBuffer(1)
+        return protocol.newPacketBuffer(1)
                 .tryWrite("ushort", id)
                 .bytes();
     }
 
     public static byte[] deletePerson(final int id){
-        return protocol.newBuffer(2)
+        return protocol.newPacketBuffer(2)
                 .tryWrite("ushort", id)
                 .bytes();
     }
 
     public static byte[] setAddress(final int id, final String address1, final String address2){
-        return protocol.newVarShortPacketBuffer(3)
+        return protocol.newPacketBuffer(3)
                 .tryWrite("ushort", id)
                 .tryWrite("byte_string", address1)
                 .tryWrite("byte_string", address2)
@@ -73,21 +73,21 @@ public class ProtocolTest {
     }
 
     public static byte[] setEmail(final int id, final String email){
-        return protocol.newVarShortPacketBuffer(4)
+        return protocol.newPacketBuffer(4)
                 .tryWrite("ushort", id)
                 .tryWrite("byte_string", email)
                 .bytes();
     }
 
     public static byte[] setAge(final int id, final int age){
-        return protocol.newBuffer(5)
+        return protocol.newPacketBuffer(5)
                 .tryWrite("ushort", id)
                 .tryWrite("ubyte", age)
                 .bytes();
     }
 
     public static byte[] setColor(final int id, final Color color){
-        return protocol.newBuffer(6)
+        return protocol.newPacketBuffer(6)
                 .tryWrite("ushort", id)
                 .tryWrite("color", color)
                 .bytes();
