@@ -39,6 +39,7 @@ public class ProtocolTest {
         Assert.assertEquals(50, m.getShort("person.age"));
         m = messages.next();
         Assert.assertEquals(Color.PINK, m.get("person.color"));
+        Assert.assertFalse(messages.hasNext());
     }
 
     public static byte[] buildTest1Buffer(final int id){
