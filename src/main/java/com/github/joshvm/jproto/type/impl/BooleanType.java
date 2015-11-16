@@ -1,18 +1,20 @@
-package com.github.joshvm.jproto.types;
+package com.github.joshvm.jproto.type.impl;
+
+import com.github.joshvm.jproto.type.SimpleType;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class BooleanType implements Type<Boolean> {
+public class BooleanType implements SimpleType<Boolean> {
 
     @Override
-    public int length() {
+    public int readLength() {
         return 1;
     }
 
     @Override
-    public Class<Boolean> type() {
+    public Class<Boolean> readType() {
         return Boolean.class;
     }
 

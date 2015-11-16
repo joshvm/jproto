@@ -1,18 +1,20 @@
-package com.github.joshvm.jproto.types;
+package com.github.joshvm.jproto.type.impl;
+
+import com.github.joshvm.jproto.type.SimpleType;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class CharacterType implements Type<Character> {
+public class CharacterType implements SimpleType<Character> {
 
     @Override
-    public int length() {
+    public int readLength() {
         return 2;
     }
 
     @Override
-    public Class<Character> type() {
+    public Class<Character> readType() {
         return Character.class;
     }
 

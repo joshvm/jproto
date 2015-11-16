@@ -1,0 +1,27 @@
+<protocol>
+    <packets>
+        <packet opcode="1"> <!-- add person -->
+            <value type="ushort">person.id</value>
+        </packet>
+        <packet opcode="2"> <!-- delete person -->
+            <value type="ushort">person.id</value>
+        </packet>
+        <packet opcode="3"> <!-- set person address -->
+            <value type="ushort">person.id</value>
+            <value type="byte_string">person.address1</value>
+            <value type="byte_string">person.address2</value>
+        </packet>
+        <packet opcode="4"> <!-- set person email -->
+            <value type="ushort">person.id</value>
+            <value type="byte_string">person.email</value>
+        </packet>
+        <packet opcode="5"> <!-- set person age -->
+            <value type="ushort">person.id</value>
+            <value type="ubyte">person.age</value>
+        </packet>
+        <packet opcode="6">
+            <value type="ushort">person.id</value>
+            <value type="color">person.color</value>
+        </packet>
+    </packets>
+</protocol>

@@ -1,19 +1,19 @@
 package com.github.joshvm.jproto.value;
 
 import com.github.joshvm.jproto.msg.Message;
-import com.github.joshvm.jproto.types.Type;
-import com.github.joshvm.jproto.types.Types;
+import com.github.joshvm.jproto.type.Type;
+import com.github.joshvm.jproto.type.Types;
 import org.jsoup.nodes.Element;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public class Value<T> {
+public class Value<W, R extends W> {
 
     protected final String name;
-    protected final Type<T> type;
+    protected final Type<W, R> type;
 
-    public Value(final String name, final Type<T> type){
+    public Value(final String name, final Type<W, R> type){
         this.name = name;
         this.type = type;
     }
@@ -22,7 +22,7 @@ public class Value<T> {
         return name;
     }
 
-    public Type<T> type(){
+    public Type<W, R> type(){
         return type;
     }
 
@@ -40,10 +40,10 @@ public class Value<T> {
         }
     }
 
-    public static <T> Value<T> parse(final Element e){
+    public static <W, R extends W> Value<W, R> parse(final Element e){
         final String name = e.ownText();
         final String typeStr = e.attr("type");
-        final Type<T> type = Types.get(typeStr);
+        final Type<W, R> type = Types.get(typeStr);
         return type != null ? new Value<>(name, type) : ArrayValue.parse(name, typeStr);
     }
 

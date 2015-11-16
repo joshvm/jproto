@@ -1,0 +1,5 @@
+<types>
+    <type class="com.github.joshvm.jproto.tests.type.ColorType">
+        <name>color</name>
+    </type>
+</types>

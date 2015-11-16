@@ -1,8 +1,8 @@
 package com.github.joshvm.jproto.value;
 
 import com.github.joshvm.jproto.msg.Message;
-import com.github.joshvm.jproto.types.Type;
-import com.github.joshvm.jproto.types.Types;
+import com.github.joshvm.jproto.type.Type;
+import com.github.joshvm.jproto.type.Types;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.lang.reflect.Array;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ArrayValue<T> extends Value<T> {
+public class ArrayValue<W, R extends W> extends Value<W, R> {
 
     public interface Reference{}
 
@@ -44,7 +44,7 @@ public class ArrayValue<T> extends Value<T> {
 
     private final Reference lengthRef;
 
-    public ArrayValue(final String name, final Type<T> type, final Reference lengthRef){
+    public ArrayValue(final String name, final Type<W, R> type, final Reference lengthRef){
         super(name, type);
         this.lengthRef = lengthRef;
     }
@@ -64,17 +64,17 @@ public class ArrayValue<T> extends Value<T> {
 
     public void read(final DataInputStream in, final Message msg) throws IOException {
         final int length = length(msg);
-        final T[] array = (T[]) Array.newInstance(type.type(), length);
+        final R[] array = (R[]) Array.newInstance(type.readType(), length);
         for(int i = 0; i < length; i++)
             array[i] = type.read(in);
         msg.put(name, array);
     }
 
-    public static <T> ArrayValue<T> parse(final String name, final String text){
+    public static <W, R extends W> ArrayValue<W, R> parse(final String name, final String text){
         final Matcher matcher = ARRAY_PATTERN.matcher(text);
         if(!matcher.matches())
             return null;
-        final Type<T> type = Types.get(matcher.group(1));
+        final Type<W, R> type = Types.get(matcher.group(1));
         final String lenStr = matcher.group(2);
         final Reference len = lenStr.matches("\\d{1,8}") ? new LiteralReference(Integer.parseInt(lenStr)) : new VariableReference(lenStr);
         return new ArrayValue<>(name, type, len);

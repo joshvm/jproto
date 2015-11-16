@@ -1,6 +1,6 @@
 package com.github.joshvm.jproto.msg;
 
-import com.github.joshvm.jproto.PacketStructure;
+import com.github.joshvm.jproto.pkt.Packet;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,17 +9,17 @@ import java.util.stream.Collectors;
 
 public class Message {
 
-    private final PacketStructure structure;
+    private final Packet packet;
     private final Map<String, Object> map;
 
-    public Message(final PacketStructure structure){
-        this.structure = structure;
+    public Message(final Packet packet){
+        this.packet = packet;
 
         map = new HashMap<>();
     }
 
-    public PacketStructure structure(){
-        return structure;
+    public Packet packet(){
+        return packet;
     }
 
     public Message put(final String key, final Object value){
@@ -49,6 +49,54 @@ public class Message {
 
     public <T> Optional<T> opt(final String key, final Class<T> clazz){
         return Optional.ofNullable(get(key, clazz));
+    }
+
+    public boolean getBoolean(final String key, final boolean defaultValue){
+        return get(key, defaultValue);
+    }
+
+    public boolean getBoolean(final String key){
+        return getBoolean(key, false);
+    }
+
+    public int getInt(final String key, final int defaultValue){
+        return get(key, defaultValue);
+    }
+
+    public int getInt(final String key){
+        return getInt(key, 0);
+    }
+
+    public short getShort(final String key, final short defaultValue){
+        return get(key, defaultValue);
+    }
+
+    public short getShort(final String key){
+        return getShort(key, (short)0);
+    }
+
+    public double getDouble(final String key, final double defaultValue){
+        return get(key, defaultValue);
+    }
+
+    public double getDouble(final String key){
+        return getDouble(key, 0);
+    }
+
+    public String getString(final String key, final String defaultValue){
+        return get(key, defaultValue);
+    }
+
+    public String getString(final String key){
+        return getString(key, null);
+    }
+
+    public Number getNumber(final String key, final Number defaultValue){
+        return get(key, defaultValue);
+    }
+
+    public Number getNumber(final String key){
+        return get(key, 0);
     }
 
     @Override

@@ -1,18 +1,20 @@
-package com.github.joshvm.jproto.types;
+package com.github.joshvm.jproto.type.impl;
+
+import com.github.joshvm.jproto.type.SimpleType;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class ShortStringType implements Type<String> {
+public class ShortStringType implements SimpleType<String> {
 
     @Override
-    public int length() {
+    public int readLength() {
         return VARIABLE_SHORT;
     }
 
     @Override
-    public Class<String> type() {
+    public Class<String> readType() {
         return String.class;
     }
 

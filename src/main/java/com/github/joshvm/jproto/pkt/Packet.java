@@ -2,7 +2,7 @@ package com.github.joshvm.jproto.pkt;
 
 import com.github.joshvm.jproto.PacketStructure;
 import com.github.joshvm.jproto.msg.Message;
-import com.github.joshvm.jproto.types.Type;
+import com.github.joshvm.jproto.type.Type;
 import com.github.joshvm.jproto.value.Value;
 
 import java.io.ByteArrayInputStream;
@@ -43,13 +43,13 @@ public class Packet {
         return this;
     }
 
-    public <T> T read(final Type<T> type) throws IOException{
+    public <W, R extends W> R read(final Type<W, R> type) throws IOException{
         if(in == null)
             startReading();
         return type.read(in);
     }
 
-    public <T> T tryRead(final Type<T> type){
+    public <W, R extends W> R tryRead(final Type<W, R> type){
         try{
             return read(type);
         }catch(Exception ex){
@@ -58,7 +58,7 @@ public class Packet {
         }
     }
 
-    public <T> Optional<T> tryReadOpt(final Type<T> type){
+    public <W, R extends W> Optional<R> tryReadOpt(final Type<W, R> type){
         return Optional.ofNullable(tryRead(type));
     }
 
@@ -72,7 +72,7 @@ public class Packet {
 
     public Message message() throws IOException{
         startReading();
-        final Message msg = new Message(structure);
+        final Message msg = new Message(this);
         for(final Value value : structure.values())
             value.read(in, msg);
         return msg;

@@ -1,18 +1,20 @@
-package com.github.joshvm.jproto.types;
+package com.github.joshvm.jproto.type.impl;
+
+import com.github.joshvm.jproto.type.NumericType;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class UnsignedByteType implements Type<Short> {
+public class UnsignedByteType implements NumericType<Short> {
 
     @Override
-    public int length() {
+    public int readLength() {
         return 1;
     }
 
     @Override
-    public Class<Short> type() {
+    public Class<Short> readType() {
         return Short.class;
     }
 
@@ -21,7 +23,7 @@ public class UnsignedByteType implements Type<Short> {
     }
 
     @Override
-    public void write(final DataOutputStream out, final Short value) throws IOException {
+    public void write(final DataOutputStream out, final Number value) throws IOException {
         out.writeByte(value.byteValue());
     }
 }

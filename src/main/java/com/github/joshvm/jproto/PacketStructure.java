@@ -1,10 +1,12 @@
 package com.github.joshvm.jproto;
 
+import com.github.joshvm.jproto.msg.Message;
 import com.github.joshvm.jproto.pkt.Packet;
 import com.github.joshvm.jproto.util.ProtocolConstants;
 import com.github.joshvm.jproto.value.Value;
 import org.jsoup.nodes.Element;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,16 +51,27 @@ public class PacketStructure implements ProtocolConstants{
             case VARIABLE_SHORT:
                 length = in.readShort();
                 break;
-            case VARIABLE_MEDIUM:
-                length = ((in.readByte() << 16) & 0xFF) + ((in.readByte() << 8) & 0xFF) + (in.readByte() + 0xFF);
-                break;
-            case VARIABLE_INTEGER:
+            case VARIABLE_INT:
                 length = in.readInt();
                 break;
         }
         final byte[] payload = new byte[length];
         in.readFully(payload);
         return new Packet(this, length, payload);
+    }
+
+    public Message readMessage(final DataInputStream in) throws IOException{
+        return read(in).message();
+    }
+
+    public Packet read(final byte[] bytes) throws IOException{
+        try(final DataInputStream in = new DataInputStream(new ByteArrayInputStream(bytes))){
+            return read(in);
+        }
+    }
+
+    public Message readMessage(final byte[] bytes) throws IOException{
+        return read(bytes).message();
     }
 
     public Packet tryRead(final DataInputStream in){
@@ -70,15 +83,44 @@ public class PacketStructure implements ProtocolConstants{
         }
     }
 
+    public Message tryReadMessage(final DataInputStream in){
+        try{
+            return readMessage(in);
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public Packet tryRead(final byte[] bytes){
+        try{
+            return read(bytes);
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public Message tryReadMessage(final byte[] bytes){
+        try{
+            return readMessage(bytes);
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     public static int calculateLength(final List<Value> values){
         int min = 0;
         int sum = 0;
         for(final Value v : values){
-            final int length = v.type().length();
+            final int length = v.type().readLength();
             sum += length;
             if(length < min)
                 min = length;
         }
+        if(min < 0 && min > VARIABLE_INT)
+            min--;
         return min < 0 ? min : sum;
     }
 
